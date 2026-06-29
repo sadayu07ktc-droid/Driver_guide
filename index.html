@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>คู่มือคนขับ · SSB Smart Supply</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#1c3a2a; --green:#3f7d4f; --green-soft:#e7f1e8;
+    --amber:#e8920c; --amber-soft:#fdf0d9; --cream:#fbf7ef;
+    --ink:#20231d; --ink-soft:#5d6356; --line:#e7e2d6; --white:#fff;
+    --brown:#7B4F2E; --shadow:0 8px 24px rgba(28,58,42,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:'Sarabun',-apple-system,'Noto Sans Thai',sans-serif;background:var(--cream);color:var(--ink);font-size:17px;line-height:1.6;overflow-x:hidden}
+  .app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;position:relative}
+
+  .top{position:sticky;top:0;z-index:50;background:var(--green-deep);color:#fff;padding:14px 18px 10px}
+  .top-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .brand{display:flex;align-items:center;gap:9px;font-family:'Kanit';font-weight:600;font-size:16px}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--amber);display:grid;place-items:center;font-size:15px}
+  .menu-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:38px;height:38px;border-radius:10px;font-size:18px;cursor:pointer;display:grid;place-items:center}
+  .menu-btn:active{background:rgba(255,255,255,.24)}
+  .progress{margin-top:11px;height:6px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+  .progress > i{display:block;height:100%;background:var(--amber);border-radius:99px;width:0;transition:width .35s cubic-bezier(.4,0,.2,1)}
+  .pmeta{display:flex;justify-content:space-between;margin-top:7px;font-size:12.5px;color:rgba(255,255,255,.72)}
+  .pmeta b{color:#fff;font-weight:600}
+
+  .stage{flex:1;padding:20px 18px 120px}
+  .card{background:var(--white);border-radius:22px;box-shadow:var(--shadow);padding:24px 20px 22px;animation:rise .42s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Kanit';font-weight:600;font-size:12.5px;letter-spacing:.6px;color:var(--green);background:var(--green-soft);padding:5px 12px;border-radius:99px}
+  .stepno{font-family:'Kanit';font-weight:700;font-size:13px;color:var(--amber)}
+  .icon-wrap{margin:18px 0 6px;width:74px;height:74px;border-radius:20px;display:grid;place-items:center;font-size:38px;background:var(--amber-soft)}
+  h1.title{font-family:'Kanit';font-weight:700;font-size:25px;line-height:1.25;color:var(--green-deep);margin-top:8px}
+  .lead{color:var(--ink-soft);margin-top:8px;font-size:16px}
+
+  .dolist{list-style:none;margin:20px 0 0;display:flex;flex-direction:column;gap:13px}
+  .dolist li{display:flex;gap:12px;align-items:flex-start}
+  .dolist .ck{flex:0 0 26px;width:26px;height:26px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;font-family:'Kanit';margin-top:1px}
+  .dolist .tx{flex:1;font-size:16px;line-height:1.55}
+  .dolist .tx b{color:var(--green-deep);font-weight:600}
+
+  .tip{margin-top:20px;background:var(--amber-soft);border:1px solid #f3dcae;border-radius:15px;padding:13px 15px;display:flex;gap:11px}
+  .tip .ti{flex:0 0 auto;font-size:19px}
+  .tip .tt{font-size:15px;line-height:1.55;color:#7a5410}
+  .tip .tt b{color:#5d3f08}
+  .pill{display:inline-block;font-size:13px;font-weight:600;font-family:'Kanit';padding:3px 11px;border-radius:99px;margin:0 4px 4px 0}
+  .pill.g{background:var(--green-soft);color:var(--green)}
+  .pill.a{background:var(--amber-soft);color:#a96a06}
+  .optional{margin-top:14px;font-size:13.5px;color:var(--ink-soft);background:#f4f1e7;border-radius:12px;padding:10px 13px}
+
+  /* ── Phone mockups ── */
+  .mock{margin-top:18px;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 4px 14px rgba(28,58,42,.08);background:#fff}
+  .mock-cap{margin-top:9px;font-size:12px;color:var(--ink-soft);text-align:center}
+  .mm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#d9ceb0}
+  .mm-tile{background:#fff;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;padding:6px 4px}
+  .mm-ic{font-size:25px;line-height:1}
+  .mm-th{font-family:'Kanit';font-weight:600;font-size:12px;color:#4e7a3e;text-align:center;line-height:1.12}
+  .mm-en{font-size:7px;letter-spacing:.7px;color:#a6b894;font-weight:700}
+  .mm-tile.hl{box-shadow:inset 0 0 0 3px var(--amber);background:#fffaf0;z-index:2;animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:inset 0 0 0 3px var(--amber)}50%{box-shadow:inset 0 0 0 3px var(--amber),0 0 0 4px rgba(232,146,12,.18)}}
+  .mm-tag{position:absolute;top:-7px;right:-3px;background:var(--amber);color:#3a2400;font-family:'Kanit';font-weight:700;font-size:9.5px;padding:2px 7px;border-radius:99px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.18);z-index:3}
+  .mm-bar{background:#e7dfc9;display:flex;align-items:center;padding:9px 14px;gap:10px}
+  .mm-kb{width:30px;height:23px;border-radius:6px;background:#f3eede;display:grid;place-items:center;font-size:12px}
+  .mm-menu{flex:1;text-align:center;font-family:'Kanit';font-weight:600;color:#5d6356;font-size:15px}
+
+  /* form mockup */
+  .fm{padding:14px}
+  .fm-lbl{font-family:'Kanit';font-weight:600;font-size:12.5px;color:var(--green);margin:13px 0 7px;display:flex;align-items:center;gap:6px}
+  .fm-lbl:first-child{margin-top:0}
+  .fm-photo{border:2px dashed #cdd6c6;border-radius:12px;padding:13px;display:flex;align-items:center;gap:11px;background:#fafcf8;margin-bottom:8px}
+  .fm-photo .pi{font-size:21px}
+  .fm-photo .pt{font-size:13px;color:var(--ink-soft);font-weight:500;flex:1;line-height:1.3}
+  .fm-ocr{font-family:'Kanit';font-weight:700;font-size:12.5px;color:#fff;background:var(--green);padding:3px 9px;border-radius:8px;white-space:nowrap}
+  .fm-weigh{border:1px solid #f0d9a8;background:var(--amber-soft);border-radius:12px;padding:11px 12px;margin-bottom:8px}
+  .fm-weigh .wt{font-family:'Kanit';font-weight:600;font-size:12.5px;color:#a96a06;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .fm-chips{display:flex;gap:6px;flex-wrap:wrap}
+  .fm-chip{background:#fff;border:1px solid #f0d9a8;border-radius:8px;padding:4px 9px;font-size:12px;color:#7a5410;font-weight:600}
+  .fm-chip b{color:#5d3f08;font-family:'Kanit'}
+  .fm-row{display:flex;gap:8px}
+  .fm-input{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:14px;color:#a4a999;background:#fff}
+  .fm-input b{display:block;font-size:10px;color:var(--green);font-family:'Kanit';font-weight:600;margin-bottom:2px}
+  .fm-btn{margin-top:14px;border-radius:12px;padding:13px;text-align:center;font-family:'Kanit';font-weight:700;font-size:15px;color:#fff}
+  .fm-btn.green{background:var(--green)}
+  .fm-btn.brown{background:var(--brown)}
+  .fm-note{background:#f4f1e7;border-radius:10px;padding:9px 12px;font-size:12px;color:var(--ink-soft);margin-bottom:8px;line-height:1.5}
+  .fm-gps{border:1px solid #cfe0d2;background:#eef6ef;border-radius:11px;padding:10px 12px;margin-bottom:8px}
+  .fm-gps-top{display:flex;justify-content:space-between;align-items:center;font-family:'Kanit';font-weight:600;font-size:12px;color:var(--green)}
+  .fm-gps-tag{background:var(--green);color:#fff;font-size:9px;font-weight:700;padding:1px 7px;border-radius:6px}
+  .fm-gps-val{font-family:'Kanit';font-weight:700;font-size:18px;color:var(--green-deep);margin:3px 0 7px}
+  .fm-gps-btn{background:#d9ead9;color:var(--green-deep);font-family:'Kanit';font-weight:600;font-size:12px;text-align:center;padding:7px;border-radius:8px}
+  .fm-load-lbl{font-family:'Kanit';font-weight:600;font-size:12px;color:var(--green);margin:10px 0 6px}
+  .fm-load{display:flex;gap:7px}
+  .fm-load-chip{flex:1;text-align:center;border:1.5px solid var(--line);border-radius:9px;padding:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);background:#fff}
+  .fm-load-chip.on.green{background:#e7f4e9;border-color:var(--green);color:var(--green)}
+  .fm-load-chip.on.orange{background:#fdeccc;border-color:var(--amber);color:#a96a06}
+
+  /* hero */
+  .hero{padding:30px 22px 26px;background:linear-gradient(160deg,var(--green-deep),#2a523a);border-radius:24px;color:#fff;box-shadow:var(--shadow);animation:rise .42s cubic-bezier(.2,.7,.3,1) both}
+  .hero .badge{display:inline-block;font-family:'Kanit';font-weight:600;font-size:12px;letter-spacing:.8px;background:var(--amber);color:#3a2400;padding:5px 13px;border-radius:99px}
+  .hero h1{font-family:'Kanit';font-weight:700;font-size:29px;line-height:1.18;margin-top:16px}
+  .hero p{color:rgba(255,255,255,.8);margin-top:12px;font-size:16px}
+  .journey{margin-top:24px;display:flex;align-items:center;gap:6px}
+  .journey .node{flex:0 0 auto;text-align:center;font-size:11px;color:rgba(255,255,255,.7);font-family:'Kanit';font-weight:500}
+  .journey .node .b{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.13);display:grid;place-items:center;font-size:17px;margin:0 auto 5px}
+  .journey .seg{flex:1;height:2px;background:rgba(255,255,255,.2);border-radius:9px}
+
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:40;max-width:480px;margin:0 auto;padding:14px 18px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--cream) 72%,rgba(251,247,239,0));display:flex;gap:11px}
+  .btn{flex:1;border:none;border-radius:15px;font-family:'Kanit';font-weight:600;font-size:17px;padding:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .12s}
+  .btn:active{transform:scale(.97)}
+  .btn.prev{flex:0 0 auto;width:58px;background:var(--white);color:var(--green-deep);box-shadow:var(--shadow);font-size:20px}
+  .btn.next{background:var(--green);color:#fff;box-shadow:0 8px 20px rgba(63,125,79,.32)}
+  .btn.next.start{background:var(--amber);box-shadow:0 8px 20px rgba(232,146,12,.32)}
+  .btn:disabled{opacity:.4;pointer-events:none}
+
+  .scrim{position:fixed;inset:0;background:rgba(20,30,22,.5);z-index:60;opacity:0;pointer-events:none;transition:opacity .25s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;z-index:61;width:84%;max-width:360px;background:var(--cream);transform:translateX(100%);transition:transform .3s cubic-bezier(.3,.7,.3,1);overflow-y:auto;padding:20px 16px calc(24px + env(safe-area-inset-bottom))}
+  .drawer.on{transform:none}
+  .drawer h3{font-family:'Kanit';font-weight:700;font-size:18px;color:var(--green-deep);padding:6px 8px 14px;display:flex;justify-content:space-between;align-items:center}
+  .drawer h3 button{background:none;border:none;font-size:24px;color:var(--ink-soft);cursor:pointer}
+  .mitem{display:flex;gap:13px;align-items:center;padding:13px 12px;border-radius:14px;cursor:pointer;margin-bottom:3px}
+  .mitem:active{background:var(--green-soft)}
+  .mitem.active{background:var(--white);box-shadow:var(--shadow)}
+  .mitem .mn{flex:0 0 30px;width:30px;height:30px;border-radius:9px;background:var(--green-soft);color:var(--green);font-family:'Kanit';font-weight:700;font-size:14px;display:grid;place-items:center}
+  .mitem.active .mn{background:var(--amber);color:#fff}
+  .mitem .ml{flex:1;font-size:15px;font-weight:500;line-height:1.35}
+  .mitem .ml small{display:block;color:var(--ink-soft);font-size:12px;font-weight:400}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="top-row">
+      <div class="brand"><span class="dot">🚛</span> SSB Smart Supply</div>
+      <button class="menu-btn" onclick="openMenu()" aria-label="เมนูขั้นตอน">☰</button>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="pmeta"><span id="phaseLabel">คู่มือคนขับ</span><span><b id="stepCur">เริ่ม</b><span id="stepTot"></span></span></div>
+  </div>
+
+  <div class="stage"><div id="view"></div></div>
+
+  <div class="nav">
+    <button class="btn prev" id="btnPrev" onclick="go(-1)" aria-label="ย้อนกลับ">‹</button>
+    <button class="btn next start" id="btnNext" onclick="go(1)"></button>
+  </div>
+
+  <div class="scrim" id="scrim" onclick="closeMenu()"></div>
+  <nav class="drawer" id="drawer" aria-label="รายการขั้นตอน">
+    <h3>ขั้นตอนทั้งหมด <button onclick="closeMenu()" aria-label="ปิด">×</button></h3>
+    <div id="menuList"></div>
+  </nav>
+</div>
+
+<script>
+// ── เมนูจริง 6 ปุ่ม ──
+const MENU = [
+  {ic:'📋', th:'รับงาน',            en:'ACCEPT JOB'},
+  {ic:'📍', th:'อัปเดตงานว่าง',     en:'AVAILABLE JOBS'},
+  {ic:'🕘', th:'ประวัติงาน',        en:'JOB HISTORY'},
+  {ic:'⏰', th:'ลงเวลา เข้า-ออก',   en:'TIME CLOCK'},
+  {ic:'🔔', th:'แจ้งลา / แจ้งซ่อม', en:'LEAVE / REPAIR'},
+  {ic:'🗒️', th:'สรุปงาน',          en:'JOB SUMMARY'}
+];
+
+// ── mockup renderers ──
+function menuMock(hl){
+  const set = (hl==null||hl==='all') ? null : (Array.isArray(hl)?hl:[hl]);
+  const tiles = MENU.map(m=>{
+    const on = set && set.includes(m.th);
+    return `<div class="mm-tile ${on?'hl':''}">
+      ${on?'<span class="mm-tag">👆 กดปุ่มนี้</span>':''}
+      <div class="mm-ic">${m.ic}</div><div class="mm-th">${m.th}</div><div class="mm-en">${m.en}</div>
+    </div>`;
+  }).join('');
+  return `<div class="mock"><div class="mm-grid">${tiles}</div>
+    <div class="mm-bar"><div class="mm-kb">⌨️</div><div class="mm-menu">เมนู ▾</div></div></div>
+    <div class="mock-cap">ภาพเมนูจริงในไลน์ · ${set?'กดปุ่มที่ไฮไลต์สีส้ม':'เมนูหลักของคนขับ'}</div>`;
+}
+function flexMock(){
+  return `<div class="mock">
+    <div style="background:#4A7C3F;color:#fff;padding:12px 14px">
+      <div style="font-family:'Kanit';font-weight:700;font-size:15px">🚛 มีงานใหม่!</div>
+      <div style="font-size:11px;color:#D6E8D0;margin-top:2px">ORD-260628-xxx</div>
+    </div>
+    <div style="padding:12px 14px;font-size:13px;color:#5d6356;line-height:1.8">🌴 สวน: คลองพลู<br>📍 จุดรับ: ลานเทฯ<br>📦 ประเภท: ปาล์ม</div>
+    <div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:7px">
+      <div class="fm-btn green" style="margin:0">✅ รับงาน</div>
+      <div style="border:1px solid var(--line);border-radius:12px;padding:11px;text-align:center;font-family:'Kanit';font-weight:600;font-size:14px;color:#9aa08f">❌ ปฏิเสธงาน</div>
+    </div></div>
+    <div class="mock-cap">การ์ดงานใหม่ที่เด้งในไลน์ · กด ✅ รับงาน</div>`;
+}
+function formMock(type){
+  const P=(l,o)=>`<div class="fm-photo"><span class="pi">📷</span><span class="pt">${l}</span>${o?`<span class="fm-ocr">${o}</span>`:''}</div>`;
+  const W=(l)=>`<div class="fm-weigh"><div class="wt">⚖️ ${l}</div><div class="fm-chips"><span class="fm-chip">หนัก <b>50,660</b></span><span class="fm-chip">เบา <b>20,650</b></span><span class="fm-chip">สุทธิ <b>30,010</b></span></div></div>`;
+  const L=(t)=>`<div class="fm-lbl">${t}</div>`;
+  const B=(c,t)=>`<div class="fm-btn ${c}">${t}</div>`;
+  const GPS=(v)=>`<div class="fm-gps"><div class="fm-gps-top"><span>📡 เลขไมล์รถ (จาก GPS)</span><span class="fm-gps-tag">DTC</span></div><div class="fm-gps-val">${v} กม.</div><div class="fm-gps-btn">📡 ดึงเลขไมล์จาก GPS</div></div>`;
+  const LOAD=(st)=>`<div class="fm-load-lbl">สภาพรถช่วงนี้</div><div class="fm-load"><span class="fm-load-chip ${st==='เบา'?'on green':''}">🟢 รถเบา</span><span class="fm-load-chip ${st==='หนัก'?'on orange':''}">🟠 รถหนัก</span></div>`;
+  const MH=(hubL,mileV,hubV,load)=>GPS(mileV)+P(hubL,hubV)+LOAD(load);
+  const INV=(l)=>`<div class="fm-weigh"><div class="wt">🧾 ${l}</div><div class="fm-chips"><span class="fm-chip">หนัก <b>50,660</b></span><span class="fm-chip">เบา <b>20,650</b></span><span class="fm-chip">สุทธิ <b>30,010</b></span><span class="fm-chip">ราคา/กก. <b>5.20</b></span><span class="fm-chip">ราคารวม <b>156,052</b></span></div></div>`;
+  const SUM=(l,v)=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line)"><span style="color:var(--ink-soft)">${l}</span><b style="font-family:'Kanit';color:var(--green-deep);text-align:right">${v}</b></div>`;
+  let s='', cap='';
+  if(type==='start'){
+    cap='หน้าจุด “เริ่ม” ในเมนูรับงาน';
+    s=L('📍 เลขไมล์ GPS + ถ่ายดุมล้อ')+MH('รูปเลขดุมล้อเริ่ม','43,210','43,541','เบา')+B('green','🚀 ยืนยันออกโรงงาน');
+  } else if(type==='rampDrop'){
+    cap='หน้าจุด “วางกระบะที่ลาน”';
+    s=`<div class="fm-note">จุดนี้แค่วางกระบะที่ลาน ไม่ต้องถ่ายใบชั่ง</div>`+MH('รูปเลขดุมล้อ','43,260','43,580','เบา')+B('brown','📍 ยืนยันถึงลานวางกระบะ');
+  } else if(type==='client'){
+    cap='หน้าจุด “ถึงลูกค้า”';
+    s=`<div class="fm-note">หลังรับกระบะเรียบร้อย ระบบดึงเลขไมล์ GPS ให้ แล้วถ่ายดุมล้อก่อนออกเดินทาง (ยังไม่ชั่งน้ำหนัก)</div>`+MH('รูปเลขดุมล้อออกจากลูกค้า','69,856','43,541','หนัก')+B('green','🌴 ยืนยันออกจากลูกค้า');
+  } else if(type==='ramp'){
+    cap='หน้าจุด “กลับถึงลาน”';
+    s=MH('รูปเลขดุมล้อ','86,774','117,748','หนัก')+L('⚖️ ใบชั่งลานเท')+W('ใบชั่งลานเท')+B('brown','🏭 ยืนยันกลับถึงลานขากลับ');
+  } else if(type==='factory'){
+    cap='หน้าจุด “ถึงโรงงาน” — ขั้นปิดงาน';
+    s=L('🧾 ใบชั่งลูกค้า / ใบชั่งลานเท ที่โรงงาน')+INV('ใบชั่งลูกค้า (ที่โรงงาน)')+W('ใบชั่งลานเท (ที่โรงงาน)')
+      +L('📍 เลขไมล์ GPS + ดุมล้อ หลังชั่ง')+MH('รูปเลขดุมล้อหลังชั่ง','69,899','43,590','หนัก')
+      +L('⛽ เติมน้ำมันที่โรงงาน')+`<div class="fm-row"><div class="fm-input"><b>จำนวนลิตร</b>20</div><div class="fm-input"><b>ราคา/ลิตร</b>30.01</div></div>`
+      +L('💸 ค่าใช้จ่ายอื่น (ถ้ามี)')+`<div class="fm-chips"><span class="fm-chip">น้ำมันทาง</span><span class="fm-chip">ทางด่วน</span><span class="fm-chip">ค่าซ่อมนอก</span><span class="fm-chip">ค่าลงของ</span><span class="fm-chip">ค่าเด็กลงของ</span></div>`
+      +B('green','📋 ดูสรุปก่อนส่ง')
+      +`<div class="fm-note" style="margin-top:10px">กดแล้วจะมีหน้าตรวจทานให้เช็คก่อนส่งจริง</div>`;
+  } else if(type==='preview'){
+    cap='หน้าตรวจทานหลังกดยืนยัน — แก้ไขได้ก่อนส่ง';
+    s=`<div style="font-family:'Kanit';font-weight:700;font-size:15px;color:var(--green-deep);margin-bottom:8px">🔍 ตรวจทานก่อนส่ง</div>`
+      +SUM('เลขไมล์ เริ่ม → จบ','43,210 → 69,899')
+      +SUM('ระยะทางรวม','26,689 กม.')
+      +SUM('น้ำหนักสุทธิ','30,010 กก.')
+      +SUM('ราคา/กก.','5.20 บาท')
+      +SUM('ราคารวม','156,052 บาท')
+      +SUM('ค่าน้ำมัน','600.20 บาท')
+      +SUM('ค่าใช้จ่ายอื่น','350 บาท')
+      +`<div class="fm-note" style="margin-top:10px">เลขหรือราคาผิด? กดปุ่มซ้ายเพื่อกลับไปแก้จุดนั้นได้</div>`
+      +`<div class="fm-row" style="margin-top:12px"><div class="fm-btn" style="margin:0;flex:1;background:#fff;color:var(--green-deep);border:1px solid var(--line)">✏️ กลับไปแก้ไข</div><div class="fm-btn green" style="margin:0;flex:1">✅ ยืนยันส่ง</div></div>`;
+  }
+  return `<div class="mock"><div class="fm">${s}</div></div><div class="mock-cap">${cap} · ตัวเลขเป็นแค่ตัวอย่าง</div>`;
+}
+function renderMock(m){
+  if(!m) return '';
+  if(m.type==='menu') return menuMock(m.hl);
+  if(m.type==='form') return formMock(m.form);
+  if(m.type==='flex') return flexMock();
+  return '';
+}
+
+// ── เนื้อหา (อิงจากเมนูจริง + โค้ดฟอร์มจริง) ──
+const STEPS = [
+  { intro:true, phase:"คู่มือคนขับ",
+    title:"วิ่งงานครบทุกขั้นตอน พร้อมภาพว่ากดปุ่มไหน",
+    sub:"กดปุ่มสีส้มด้านล่างดูทีละขั้น แต่ละขั้นมีภาพเมนู/ฟอร์มจริงให้ดูว่าต้องกดตรงไหน" },
+
+  { phase:"ลงทะเบียน", icon:"📝", short:"ลงทะเบียน", sub:"ทำครั้งเดียว",
+    title:"ลงทะเบียนเป็นคนขับ (ครั้งแรกครั้งเดียว)",
+    lead:"ทำรอบเดียวจบ ถ้าเห็นเมนู 6 ปุ่มในไลน์แล้ว แปลว่าลงทะเบียนเรียบร้อย",
+    todo:[
+      "สแกน QR เพิ่มเพื่อนไลน์ <b>SSB Smart Supply</b>",
+      "ระบบถาม → เลือก <b>4 คนขับรถ</b>",
+      "พิมพ์ <b>ชื่อ-นามสกุล</b> แล้วตามด้วย <b>เบอร์โทร</b>",
+      "เลือก <b>ประเภทรถ</b> แล้วพิมพ์ <b>ทะเบียนรถ</b>",
+      "รอแอดมินอนุมัติเป็น <b>Active</b>"
+    ],
+    tip:"เลือกประเภทรถและทะเบียนให้ตรงกับรถที่ขับจริง ระบบใช้ข้อมูลนี้ตอนมอบงาน" },
+
+  { phase:"เมนูหลัก", icon:"📲", short:"รู้จักเมนู 6 ปุ่ม", sub:"แผงเมนูในไลน์",
+    title:"ทำความรู้จักเมนู 6 ปุ่ม",
+    lead:"ปุ่มเมนูอยู่ด้านล่างห้องแชทไลน์ แตะแล้วเลือกได้เลย",
+    todo:[
+      "<b>รับงาน</b> — เปิดงานที่รับไว้ แล้วกรอกตามจุด (ใช้บ่อยสุด)",
+      "<b>อัปเดตงานว่าง</b> — ดูงานที่ยังว่าง แล้วหยิบมาทำ",
+      "<b>ประวัติงาน</b> — งานที่วิ่งไปแล้ว",
+      "<b>ลงเวลา เข้า-ออก</b> — กดเข้างานตอนเริ่ม / ออกงานตอนเลิก",
+      "<b>แจ้งลา / แจ้งซ่อม</b> — ขอลา หรือแจ้งรถเสีย",
+      "<b>สรุปงาน</b> — สรุปงาน/ชั่วโมงของเรา"
+    ],
+    tip:"งานวิ่งจริงส่วนใหญ่อยู่ในปุ่ม “รับงาน” ปุ่มเดียว จำปุ่มนี้ไว้ให้แม่น",
+    mock:{type:'menu', hl:'all'} },
+
+  { phase:"เข้างาน", icon:"⏰", short:"ลงเวลา เข้า-ออก", sub:"เริ่ม-เลิกงาน",
+    title:"ลงเวลา เข้า-ออกงาน",
+    lead:"ทุกวันก่อนเริ่มงานให้กดเข้างาน และตอนเลิกงานให้กดออกงาน",
+    todo:[
+      "ก่อนเริ่มงาน → แตะเมนู <b>ลงเวลา เข้า-ออก</b> → กด <b>เข้างาน</b>",
+      "เลิกงานแล้ว → เปิดเมนูเดิม → กด <b>ออกงาน</b>",
+      "ดูสถานะได้ว่าวันนี้ลงเวลาเข้า/ออกแล้วหรือยัง"
+    ],
+    tip:"ลงเวลาให้ครบทั้งเข้าและออกทุกวัน เพื่อให้ชั่วโมงทำงานถูกต้อง",
+    mock:{type:'menu', hl:'ลงเวลา เข้า-ออก'} },
+
+  { phase:"รับงาน", icon:"🚛", short:"รับงานใหม่", sub:"งานเด้งในไลน์",
+    title:"รับงานใหม่",
+    lead:"งานใหม่จะเด้งเป็นการ์ดในไลน์ หรือไปหยิบเองที่ “อัปเดตงานว่าง”",
+    todo:[
+      "การ์ด <b>🚛 มีงานใหม่!</b> เด้งมา → กด <b>✅ รับงาน</b>",
+      "หรือเปิดเมนู <b>อัปเดตงานว่าง</b> เพื่อหยิบงานที่ยังว่าง",
+      "ระบบตอบยืนยัน <b>เลขงาน / จุดรับ / ทะเบียนรถ</b>"
+    ],
+    tip:"กด ✅ รับงาน ทีเดียวพอ รอระบบตอบ อย่ากดซ้ำหลายครั้ง",
+    mock:{type:'flex'} },
+
+  { phase:"รับงาน", icon:"📂", short:"เปิดงานที่ทำอยู่", sub:"กดเมนู รับงาน",
+    title:"เปิดงานที่กำลังทำ",
+    lead:"กดเมนู “รับงาน” จะเห็นลำดับจุดงาน ทำไล่จากบนลงล่าง",
+    todo:[
+      "แตะเมนู <b>รับงาน</b>",
+      "เห็นลำดับจุดงาน: ออกโรงงาน → (ลาน) → ลูกค้า → (ลาน) → โรงงาน",
+      "จุดที่ขึ้นว่า <b>กำลังดำเนินการ</b> คือจุดที่ต้องกรอกตอนนี้"
+    ],
+    tip:"ทำทีละจุดตามลำดับ จุดถัดไปจะเปิดให้เองเมื่อจุดก่อนหน้าเสร็จ",
+    mock:{type:'menu', hl:'รับงาน'} },
+
+  { phase:"วิ่งงาน", icon:"🏭", short:"ออกโรงงาน", sub:"จุดเริ่ม",
+    title:"ออกโรงงาน — บันทึกเลขเริ่มต้น",
+    lead:"เลขไมล์ดึงจาก GPS · ดุมล้อถ่ายรูป · เลือกสภาพรถเบา/หนัก",
+    todo:[
+      "กด <b>📡 ดึงเลขไมล์จาก GPS</b> (ถ้าดึงไม่ได้ค่อยกรอกมือ)",
+      "ถ่าย <b>รูปเลขดุมล้อเริ่ม</b> ระบบอ่าน OCR ให้",
+      "เลือก <b>สภาพรถ</b>: 🟢 รถเบา / 🟠 รถหนัก",
+      "กดปุ่มเขียว <b>🚀 ยืนยันออกโรงงาน</b>"
+    ],
+    tip:"เลขไมล์ใช้จาก GPS ถ้ายังขึ้นว่าดึงไม่ได้ ให้กดดึงใหม่ หรือกรอกจากหน้าปัดเอง",
+    mock:{type:'form', form:'start'} },
+
+  { phase:"วิ่งงาน", icon:"📦", short:"ลานวางกระบะ", sub:"เฉพาะงานแวะลาน",
+    title:"ถึงลานวางกระบะ",
+    lead:"ทำเฉพาะงานที่ระบุว่าแวะลานเท",
+    optional:"งานที่ไม่แวะลาน ข้ามขั้นนี้ไปได้เลย",
+    todo:[
+      "ดึง <b>เลขไมล์ GPS</b> + ถ่าย <b>ดุมล้อ</b> + เลือก <b>สภาพรถ</b>",
+      "ไม่ต้องถ่ายใบชั่ง (รู้สุทธิตอนขากลับ)",
+      "กดปุ่มน้ำตาล <b>📍 ยืนยันถึงลานวางกระบะ</b>"
+    ],
+    tip:"เลขดุมล้อต้องไม่น้อยกว่าจุดก่อนหน้า ถ้าเตือนให้ถ่ายใหม่ให้ตรง",
+    mock:{type:'form', form:'rampDrop'} },
+
+  { phase:"วิ่งงาน", icon:"🌴", short:"ถึงสวน/ลูกค้า", sub:"รับกระบะ",
+    title:"ถึงสวน/ลูกค้า — รับกระบะ",
+    lead:"จุดนี้แค่รับกระบะแล้วบันทึกเลข ยังไม่ชั่งน้ำหนัก",
+    todo:[
+      "รับกระบะจากลูกค้า/สวนให้เรียบร้อย",
+      "ดึง <b>เลขไมล์ GPS</b> + ถ่าย <b>ดุมล้อออกจากลูกค้า</b>",
+      "เลือก <b>สภาพรถ</b> (ขากลับมักเป็น 🟠 รถหนัก)",
+      "กดปุ่มเขียว <b>🌴 ยืนยันออกจากลูกค้า</b>"
+    ],
+    tip:"ยังไม่ชั่งน้ำหนักที่นี่ — ใบชั่งจะไปทำตอนกลับถึงลานเท และที่โรงงาน",
+    mock:{type:'form', form:'client'} },
+
+  { phase:"วิ่งงาน", icon:"🔄", short:"ลานขากลับ", sub:"เฉพาะงานแวะลาน",
+    title:"ถึงลานขากลับ",
+    lead:"กลับมารับกระบะพร้อมผลปาล์มที่ลาน จุดนี้เริ่มมีใบชั่ง",
+    optional:"งานที่ไม่แวะลาน ข้ามขั้นนี้ไปได้เลย",
+    todo:[
+      "ดึง <b>เลขไมล์ GPS</b> + ถ่าย <b>ดุมล้อ</b> + เลือก <b>สภาพรถ</b>",
+      "ถ่าย <b>ใบชั่งลานเท</b> — ระบบ OCR อ่าน หนัก/เบา/สุทธิ",
+      "กดปุ่มน้ำตาล <b>🏭 ยืนยันกลับถึงลานขากลับ</b>"
+    ],
+    tip:"วางใบชั่งให้เรียบ ไม่มีเงาบัง เห็นตัวเลขครบทั้ง 3 ค่า",
+    mock:{type:'form', form:'ramp'} },
+
+  { phase:"ปิดงาน", icon:"🧾", short:"ถึงโรงงาน", sub:"ปิดงาน+ค่าใช้จ่าย",
+    title:"ถึงโรงงาน — ปิดงานและลงค่าใช้จ่าย",
+    lead:"ขั้นสุดท้าย ถ่ายใบชั่งและลงค่าใช้จ่ายให้ครบ",
+    todo:[
+      "ถ่าย <b>ใบชั่งลูกค้า</b> (มีหนัก, เบา, สุทธิ, ราคา/กก., ราคารวม) + <b>ใบชั่งลานเท</b> ถ้ามี",
+      "ดึง <b>เลขไมล์ GPS</b> + ถ่าย <b>ดุมล้อหลังชั่ง</b> + เลือก <b>สภาพรถ</b>",
+      "เติมน้ำมันโรงงาน: กรอก <b>ลิตร + ราคา/ลิตร</b> + แนบรูปใบเติม",
+      "ลงค่าใช้จ่ายอื่น: น้ำมันทาง, ทางด่วน, ค่าซ่อมนอก, ค่าลงของ, ค่าเด็กลงของ",
+      "กดปุ่มเขียว <b>📋 ดูสรุปก่อนส่ง</b> → จะมีหน้าตรวจทานให้เช็คก่อนส่ง"
+    ],
+    tip:"แนบรูปบิลทุกใบ (น้ำมัน/ซ่อม) เพื่อให้เบิกค่าใช้จ่ายได้ครบ",
+    mock:{type:'form', form:'factory'} },
+
+  { phase:"ปิดงาน", icon:"🔍", short:"ตรวจทานก่อนส่ง", sub:"แก้ไขได้",
+    title:"ตรวจทานก่อนส่ง — แก้ไขได้",
+    lead:"หลังกดยืนยันเสร็จงาน ระบบจะสรุปทุกอย่างให้ตรวจอีกรอบ",
+    todo:[
+      "ดูสรุป: เลขไมล์เริ่ม-จบ, ระยะทาง, น้ำหนักสุทธิ, ราคา/กก., ราคารวม",
+      "ดูค่าใช้จ่าย: ค่าน้ำมัน และค่าใช้จ่ายอื่น",
+      "เลขหรือราคาผิด? กด <b>✏️ กลับไปแก้ไข</b> ไปแก้จุดนั้นได้เลย",
+      "ถูกต้องครบแล้วค่อยกด <b>✅ ยืนยันส่ง</b> เพื่อปิดงานจริง"
+    ],
+    tip:"ตรวจราคารวมและเลขไมล์ให้ดีก่อนส่ง ส่งไปแล้วแก้ยากกว่า",
+    mock:{type:'form', form:'preview'} },
+
+  { phase:"ตรวจงาน", icon:"🗂️", short:"ประวัติ / สรุปงาน", sub:"ดูงานย้อนหลัง",
+    title:"ดูประวัติงานและสรุปงาน",
+    lead:"ตรวจงานที่วิ่งไปและชั่วโมงของตัวเองได้ที่ 2 ปุ่มนี้",
+    todo:[
+      "<b>ประวัติงาน</b> — งานที่เสร็จแล้ว + ระยะทาง/น้ำมัน",
+      "<b>สรุปงาน</b> — สรุปภาพรวมงานของเรา",
+      "ดูแล้วเลขไม่ตรง? แจ้งแอดมินได้เลย"
+    ],
+    tip:"เช็คประวัติเป็นประจำ ถ้าเห็นข้อมูลผิดให้รีบแจ้งทันที",
+    mock:{type:'menu', hl:['ประวัติงาน','สรุปงาน']} },
+
+  { phase:"อื่นๆ", icon:"🔔", short:"แจ้งลา / แจ้งซ่อม", sub:"เมนูช่วยเหลือ",
+    title:"แจ้งลา / แจ้งซ่อม",
+    lead:"ปุ่มนี้ไว้ขอลา หรือแจ้งรถเสีย",
+    todo:[
+      "ขอลา: เลือก <b>วันเริ่ม-สิ้นสุด</b> แล้วส่งคำขอ",
+      "แจ้งซ่อม: เลือกรถ + กรอก <b>อาการ</b> แล้วส่งให้แอดมิน",
+      "ส่งคำขอ → รอแอดมินอนุมัติ"
+    ],
+    tip:"รถมีปัญหา รีบแจ้งซ่อมทันที จะได้จัดรถสำรองได้ทัน",
+    mock:{type:'menu', hl:['แจ้งลา / แจ้งซ่อม']} },
+
+  { end:true, phase:"พร้อมวิ่งงาน", icon:"✅",
+    title:"พร้อมวิ่งงานแล้ว!",
+    lead:"จำ 4 ข้อนี้ไว้ทุกครั้ง แล้วงานจะราบรื่น",
+    recap:[
+      "งานวิ่งจริงอยู่ในปุ่ม “รับงาน” — ทำไล่ตามลำดับจุดงาน",
+      "เลขไมล์มาจาก GPS · ถ่ายดุมล้อ/ใบชั่งให้ชัด OCR จะอ่านแม่น",
+      "เลขดุมล้อห้ามถอยหลัง ต้องเพิ่มขึ้นเสมอ",
+      "ถึงโรงงานแล้วลงน้ำมัน/ค่าใช้จ่ายให้ครบก่อนกดเสร็จงาน"
+    ] }
+];
+
+let i = 0;
+const view=document.getElementById('view'), bar=document.getElementById('bar'),
+  phaseLabel=document.getElementById('phaseLabel'), stepCur=document.getElementById('stepCur'),
+  stepTot=document.getElementById('stepTot'), btnPrev=document.getElementById('btnPrev'),
+  btnNext=document.getElementById('btnNext');
+const numbered = STEPS.map((s,idx)=>(!s.intro&&!s.end)?idx:null).filter(x=>x!==null);
+
+function render(){
+  const s = STEPS[i];
+  let html='';
+  if(s.intro){
+    html=`<div class="hero">
+      <span class="badge">SSB Smart Supply</span>
+      <h1>${s.title}</h1><p>${s.sub}</p>
+      <div class="journey">
+        <div class="node"><div class="b">🏭</div>โรงงาน</div><div class="seg"></div>
+        <div class="node"><div class="b">📦</div>ลาน</div><div class="seg"></div>
+        <div class="node"><div class="b">🌴</div>สวน</div><div class="seg"></div>
+        <div class="node"><div class="b">🏭</div>กลับ</div>
+      </div></div>`;
+  } else if(s.end){
+    html=`<div class="card">
+      <div class="icon-wrap" style="background:var(--green-soft)">${s.icon}</div>
+      <h1 class="title">${s.title}</h1><p class="lead">${s.lead}</p>
+      <ul class="dolist">${s.recap.map((t,n)=>`<li><span class="ck">${n+1}</span><span class="tx">${t}</span></li>`).join('')}</ul>
+    </div>`;
+  } else {
+    const stepIndex = numbered.indexOf(i)+1;
+    html=`<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="eyebrow">${s.phase}</span><span class="stepno">ขั้นที่ ${stepIndex} / ${numbered.length}</span>
+      </div>
+      <div class="icon-wrap">${s.icon}</div>
+      <h1 class="title">${s.title}</h1><p class="lead">${s.lead}</p>
+      ${s.optional?`<div class="optional">⏭️ ${s.optional}</div>`:''}
+      ${s.mock?renderMock(s.mock):''}
+      <ul class="dolist">${s.todo.map((t,n)=>`<li><span class="ck">${n+1}</span><span class="tx">${t}</span></li>`).join('')}</ul>
+      ${s.tip?`<div class="tip"><span class="ti">💡</span><span class="tt"><b>เคล็ดลับ: </b>${s.tip}</span></div>`:''}
+    </div>`;
+  }
+  view.innerHTML=html;
+
+  bar.style.width=(i/(STEPS.length-1))*100+'%';
+  phaseLabel.textContent=s.phase;
+  if(s.intro){stepCur.textContent='เริ่ม';stepTot.textContent='';}
+  else if(s.end){stepCur.textContent='จบ';stepTot.textContent='';}
+  else {stepCur.textContent='ขั้น '+(numbered.indexOf(i)+1);stepTot.textContent=' / '+numbered.length;}
+
+  btnPrev.disabled=(i===0);
+  if(i===0){btnNext.textContent='เริ่มดูคู่มือ →';btnNext.classList.add('start');}
+  else if(i===STEPS.length-1){btnNext.textContent='↑ กลับไปเริ่มต้น';btnNext.classList.remove('start');}
+  else {btnNext.textContent='ถัดไป ›';btnNext.classList.remove('start');}
+
+  window.scrollTo(0,0);
+  buildMenu();
+}
+function go(d){
+  if(i===STEPS.length-1 && d>0){i=0;render();return;}
+  const ni=i+d; if(ni<0||ni>=STEPS.length) return; i=ni; render();
+}
+function buildMenu(){
+  document.getElementById('menuList').innerHTML = STEPS.map((s,idx)=>{
+    if(s.intro) return `<div class="mitem ${idx===i?'active':''}" onclick="jump(${idx})"><span class="mn">●</span><span class="ml">หน้าแรก</span></div>`;
+    if(s.end) return `<div class="mitem ${idx===i?'active':''}" onclick="jump(${idx})"><span class="mn">✓</span><span class="ml">สรุป / เคล็ดลับ</span></div>`;
+    const n=numbered.indexOf(idx)+1;
+    return `<div class="mitem ${idx===i?'active':''}" onclick="jump(${idx})"><span class="mn">${n}</span><span class="ml">${s.short} <small>${s.phase}</small></span></div>`;
+  }).join('');
+}
+function jump(idx){i=idx;render();closeMenu();}
+function openMenu(){document.getElementById('scrim').classList.add('on');document.getElementById('drawer').classList.add('on');}
+function closeMenu(){document.getElementById('scrim').classList.remove('on');document.getElementById('drawer').classList.remove('on');}
+
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60){if(dx<0)go(1);else go(-1);}},{passive:true});
+
+render();
+</script>
+</body>
+</html>
